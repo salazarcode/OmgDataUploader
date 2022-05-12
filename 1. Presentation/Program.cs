@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Omg_Data_Uploader_From_Files
+namespace _1._Presentation
 {
     internal class Program
     {
