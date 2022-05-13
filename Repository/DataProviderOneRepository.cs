@@ -1,12 +1,13 @@
-﻿using Interfaces.Repositories;
+﻿using Dapper;
+using Domain.Entities;
+using Domain.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
-namespace Repository
+namespace Data.Repository
 {
     public class DataProviderOneRepository : IDataProviderOneRepository
     {
@@ -15,18 +16,29 @@ namespace Repository
         {
             _connection = dataProvider.GetConnection();                
         }
-        public int Create()
+        public async Task<int> Create(DataProviderOneEntity entity)
         {
             try
             {
+                string query = $@"
+                    insert into RawData(
+                        vid
+                    ) 
+                    values(
+                        @vid
+                    ) returning RawDataID;
+                ";
 
-                return 1;
+                Dictionary<string, object> p = new Dictionary<string, object>();
+                p.Add("@vid", entity.vid);
+
+                IEnumerable<int> res = await _connection.QueryAsync<int>(query, p);
+                return res.First();
             }
             catch (Exception)
             {
                 throw;
             }
-
         }
     }
 }

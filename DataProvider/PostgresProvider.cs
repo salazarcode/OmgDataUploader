@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository
+namespace Data.Repository
 {
     public class PostgresProvider : IDataProvider
     {
@@ -18,7 +18,7 @@ namespace Repository
         public PostgresProvider(IConfiguration conf)
         {
             _conf = conf;
-            _connectionString = _conf.GetConnectionString("postgres");
+            _connectionString = _conf.GetConnectionString("prod");
         }
 
         public IDbConnection GetConnection() 
