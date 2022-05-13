@@ -1,6 +1,6 @@
 ﻿namespace Presentation.API.ViewModels
 {
-    public class DataProviderOneVM
+    public class RawDataVM
     {
         public int vid { get; set; }
     }

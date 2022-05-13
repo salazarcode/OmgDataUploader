@@ -35,7 +35,7 @@ namespace Presentation.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Presentation.API", Version = "v1" });
             });
             services.AddScoped<IDataProvider, PostgresProvider>();
-            services.AddScoped<IDataProviderOneRepository, DataProviderOneRepository>();
+            services.AddScoped<IDataProviderRepository, DataProviderRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class DataProviderOneEntity
+    public class RawData
     {
-        public int vid { get; set; }
+        public int RawDataID { get; set; }
+        public DataFile DataFile { get; set; }
+        public string TextLine { get; set; }
     }
 }

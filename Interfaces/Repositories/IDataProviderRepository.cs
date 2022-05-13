@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Repositories
 {
-    public interface IDataProviderOneRepository
+    public interface IDataProviderRepository : IRepository<DataProvider>
     {
-        public Task<int> Create(DataProviderOneEntity entity);
     }
 }
