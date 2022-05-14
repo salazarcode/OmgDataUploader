@@ -36,6 +36,7 @@ namespace Presentation.API
             });
             services.AddScoped<IDataProvider, PostgresProvider>();
             services.AddScoped<IDataProviderRepository, DataProviderRepository>();
+            services.AddScoped<IDataFileRepository, DataFileRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

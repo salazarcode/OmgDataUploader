@@ -12,23 +12,23 @@ namespace Presentation.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DataProvidersController : ControllerBase
+    public class DataFilesController : ControllerBase
     {
-        private readonly ILogger<DataProvidersController> _logger;
-        private readonly IDataProviderRepository _dataProviderOneRepository;
+        private readonly ILogger<DataFilesController> _logger;
+        private readonly IDataFileRepository _DataFileOneRepository;
 
-        public DataProvidersController(ILogger<DataProvidersController> logger, IDataProviderRepository dataProviderOneRepository)
+        public DataFilesController(ILogger<DataFilesController> logger, IDataFileRepository DataFileOneRepository)
         {
             _logger = logger;
-            _dataProviderOneRepository = dataProviderOneRepository;
+            _DataFileOneRepository = DataFileOneRepository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<DataProvider>> All()
+        public async Task<IEnumerable<DataFile>> All()
         {
             try
             {
-                var res = await _dataProviderOneRepository.All();
+                var res = await _DataFileOneRepository.All();
                 return res;
             }
             catch (Exception ex)
@@ -39,12 +39,12 @@ namespace Presentation.API.Controllers
         }
 
         [HttpGet]
-        [Route("{DataProviderID}")]
-        public async Task<IActionResult> Find([FromRoute] int DataProviderID)
+        [Route("{DataFileID}")]
+        public async Task<IActionResult> Find([FromRoute] int DataFileID)
         {
             try
             {
-                DataProvider res = await _dataProviderOneRepository.Find(DataProviderID);
+                DataFile res = await _DataFileOneRepository.Find(DataFileID);
                 return res == null ? NotFound("The entity doesn't exists") : Ok(res);
             }
             catch (Exception ex)
@@ -55,12 +55,12 @@ namespace Presentation.API.Controllers
         }
 
         [HttpPost]
-        public async Task<DataProvider> Create([FromBody] DataProvider dataProvider)
+        public async Task<DataFile> Create([FromBody] DataFile DataFile)
         {
             try
             {
-                dataProvider.CreatedAt = DateTime.Now;  
-                DataProvider res = await _dataProviderOneRepository.Create(dataProvider);
+                DataFile.CreatedAt = DateTime.Now;  
+                DataFile res = await _DataFileOneRepository.Create(DataFile);
                 return res;
             }
             catch (Exception ex)
@@ -71,11 +71,11 @@ namespace Presentation.API.Controllers
         }
 
         [HttpPatch]
-        public async Task<DataProvider> Update([FromBody] DataProvider dataProvider)
+        public async Task<DataFile> Update([FromBody] DataFile DataFile)
         {
             try
             {
-                DataProvider res = await _dataProviderOneRepository.Update(dataProvider);
+                DataFile res = await _DataFileOneRepository.Update(DataFile);
                 return res;
             }
             catch (Exception ex)
@@ -86,12 +86,12 @@ namespace Presentation.API.Controllers
         }
 
         [HttpDelete]
-        [Route("{DataProviderID}")]
-        public async Task<IActionResult> Delete([FromRoute] int DataProviderID)
+        [Route("{DataFileID}")]
+        public async Task<IActionResult> Delete([FromRoute] int DataFileID)
         {
             try
             {
-                int res = await _dataProviderOneRepository.Delete(DataProviderID);
+                int res = await _DataFileOneRepository.Delete(DataFileID);
                 return res == 1 ? Ok("Deleted successfully") : NotFound("Unable to delete the entity");
             }
             catch (Exception ex)
