@@ -43,7 +43,7 @@ namespace Data.Repository
 
                 Dictionary<string, object> p = new Dictionary<string, object>();
                 p.Add("@DataProviderName", entity.DataProviderName);
-                p.Add("@BaseFolderPath", entity.BaseFolderPath);
+                p.Add("@AzureContainerName", entity.AzureContainerName);
                 p.Add("@CreatedAt", entity.CreatedAt);
 
                 IEnumerable<int> res = await _connection.QueryAsync<int>(query, p);
@@ -108,7 +108,7 @@ namespace Data.Repository
                 Dictionary<string, object> p = new Dictionary<string, object>();
                 p.Add("@DataProviderID", entity.DataProviderID);
                 p.Add("@DataProviderName", entity.DataProviderName);
-                p.Add("@BaseFolderPath", entity.BaseFolderPath);
+                p.Add("@AzureContainerName", entity.AzureContainerName);
 
                 int res = await _connection.ExecuteAsync(query, p);
                 var element = await this.Find(entity.DataProviderID);

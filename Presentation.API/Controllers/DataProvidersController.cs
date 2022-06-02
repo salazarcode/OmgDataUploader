@@ -15,12 +15,12 @@ namespace Presentation.API.Controllers
     public class DataProvidersController : ControllerBase
     {
         private readonly ILogger<DataProvidersController> _logger;
-        private readonly IDataProviderRepository _dataProviderOneRepository;
+        private readonly IDataProviderRepository _dataProviderRepository;
 
-        public DataProvidersController(ILogger<DataProvidersController> logger, IDataProviderRepository dataProviderOneRepository)
+        public DataProvidersController(ILogger<DataProvidersController> logger, IDataProviderRepository dataProviderRepository)
         {
             _logger = logger;
-            _dataProviderOneRepository = dataProviderOneRepository;
+            _dataProviderRepository = dataProviderRepository;
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace Presentation.API.Controllers
         {
             try
             {
-                var res = await _dataProviderOneRepository.All();
+                var res = await _dataProviderRepository.All();
                 return res;
             }
             catch (Exception ex)
@@ -44,7 +44,7 @@ namespace Presentation.API.Controllers
         {
             try
             {
-                DataProvider res = await _dataProviderOneRepository.Find(DataProviderID);
+                DataProvider res = await _dataProviderRepository.Find(DataProviderID);
                 return res == null ? NotFound("The entity doesn't exists") : Ok(res);
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace Presentation.API.Controllers
             try
             {
                 dataProvider.CreatedAt = DateTime.Now;  
-                DataProvider res = await _dataProviderOneRepository.Create(dataProvider);
+                DataProvider res = await _dataProviderRepository.Create(dataProvider);
                 return res;
             }
             catch (Exception ex)
@@ -75,7 +75,7 @@ namespace Presentation.API.Controllers
         {
             try
             {
-                DataProvider res = await _dataProviderOneRepository.Update(dataProvider);
+                DataProvider res = await _dataProviderRepository.Update(dataProvider);
                 return res;
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace Presentation.API.Controllers
         {
             try
             {
-                int res = await _dataProviderOneRepository.Delete(DataProviderID);
+                int res = await _dataProviderRepository.Delete(DataProviderID);
                 return res == 1 ? Ok("Deleted successfully") : NotFound("Unable to delete the entity");
             }
             catch (Exception ex)

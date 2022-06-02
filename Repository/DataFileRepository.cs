@@ -48,13 +48,13 @@ namespace Data.Repository
             try
             {
                 string query = $@"  insert into DataFiles(
-                                        DataProviderID, AbsolutePath, CreatedAt) 
+                                        DataProviderID, DataProvider, CreatedAt) 
                                     values(
-                                        @DataProviderID, @AbsolutePath, @CreatedAt) returning DataFileID";
+                                        @DataProviderID, @DataProvider, @CreatedAt) returning DataFileID";
 
                 Dictionary<string, object> p = new Dictionary<string, object>();
                 p.Add("@DataProviderID", entity.DataProvider.DataProviderID);
-                p.Add("@AbsolutePath", entity.AbsolutePath);
+                p.Add("@DataProvider", entity.FileName);
                 p.Add("@CreatedAt", entity.CreatedAt);
 
                 IEnumerable<int> res = await _connection.QueryAsync<int>(query, p);
@@ -117,6 +117,36 @@ namespace Data.Repository
             }
         }
 
+        public async Task<IEnumerable<DataFile>> GetByDataProviderID(int DataProviderID)
+        {
+            try
+            {
+                string query = $@"
+                    select df.*, dp.*, dp.DataProviderID 
+                    from DataFiles df 
+                    inner join DataProviders dp on dp.DataProviderID = df.DataProviderID
+                    where df.DataProviderID = @DataProviderID";
+
+                Dictionary<string, object> p = new Dictionary<string, object>();
+                p.Add("@DataProviderID", DataProviderID);
+
+                IEnumerable<DataFile> res = await _connection.QueryAsync<DataFile, DataProvider, DataFile>(
+                    query,
+                    (file, provider) => {
+                        file.DataProvider = provider;
+                        return file;
+                    },
+                    param: p,
+                    splitOn: "DataProviderName"
+                );
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<DataFile> Update(DataFile entity)
         {
             try
@@ -124,14 +154,14 @@ namespace Data.Repository
                 string query = $@"
                             update DataFiles 
                             set 
-                                DataProviderID = @DataProviderID, AbsolutePath = @AbsolutePath
+                                DataProviderID = @FileName, AbsolutePath = @FileName
                             where 
                                 DataFileID = @DataFileID";
 
                 Dictionary<string, object> p = new Dictionary<string, object>();
                 p.Add("@DataFileID", entity.DataFileID);
                 p.Add("@DataProviderID", entity.DataProvider.DataProviderID);
-                p.Add("@AbsolutePath", entity.AbsolutePath);
+                p.Add("@FileName", entity.FileName);
 
                 int res = await _connection.ExecuteAsync(query, p);
                 var element = await this.Find(entity.DataFileID);

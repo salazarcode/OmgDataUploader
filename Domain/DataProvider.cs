@@ -10,7 +10,10 @@ namespace Domain.Entities
     {
         public int DataProviderID { get; set; }
         public string DataProviderName { get; set; }
-        public string BaseFolderPath { get; set; }
+        public string AzureContainerName { get; set; }
+        public List<DataFile> ProcessedDataFiles { get; set; }
+        public List<string> ActualFiles { get; set; }
+        public List<string> NewFiles { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

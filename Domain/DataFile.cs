@@ -10,7 +10,7 @@ namespace Domain.Entities
     {
         public int DataFileID { get; set; }
         public DataProvider DataProvider { get; set; }
-        public string AbsolutePath { get; set; }
+        public string FileName { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

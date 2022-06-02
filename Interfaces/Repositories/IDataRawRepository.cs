@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Repositories
 {
-    public interface IDataFileRepository : IRepository<DataFile>
+    public interface IDataRawRepository : IRepository<DataFile>
     {
-        public Task<IEnumerable<DataFile>> GetByDataProviderID(int DataProviderID);
     }
 }
