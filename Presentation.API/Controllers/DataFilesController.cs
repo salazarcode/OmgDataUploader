@@ -119,12 +119,22 @@ namespace Presentation.API.Controllers
         {
             try
             {
+                //The proccess 
+
+                // Review every DataProvider checking for new files
+                // Those new files must be updated
+
+
+
+
+
+
                 // step 1: Read from DB which files have been processed 
                 IEnumerable<DataProvider> providers = await _dataProviderRepository.All();
                 foreach (var provider in providers)
                 {
                     BlobContainerClient blobContainerClient = _blobService.GetBlobContainerClient(provider.AzureContainerName);
-                    var blobs = blobContainerClient.GetBlobs();
+                    Azure.Pageable<BlobItem> blobs = blobContainerClient.GetBlobs();
 
                     provider.ActualFiles = blobs.Select(b => b.Name).ToList();
                     provider.ProcessedDataFiles = (await _DataFileRepository.GetByDataProviderID(provider.DataProviderID)).ToList();
@@ -136,13 +146,66 @@ namespace Presentation.API.Controllers
                         switch (provider.DataProviderName.ToLower().Replace(" ", "_"))
                         {
                             case "test_data_provider":
-                                List<GenericMasterEntity> entities = new List<GenericMasterEntity>();
-
-                                var blobClient = blobContainerClient.GetBlobClient(file); 
+                                //Get the file from BlobStorage Container
+                                var blobClient = blobContainerClient.GetBlobClient(file);
                                 BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
                                 string downloadedData = downloadResult.Content.ToString();
                                 List<string> lines = downloadedData.Split("\n").Select(x => x.Replace("\"", "").ToString()).ToList();
-                                List<List<string>> matrix = lines.Select(x => x.Split(",").ToList()).ToList(); 
+                                List<List<string>> matrix = lines.Select(x => x.Split(",").ToList()).ToList();
+                                matrix.RemoveAt(0);
+
+                                //The custom mapping for each line
+                                List<GenericMasterEntity> list = new List<GenericMasterEntity>();
+                                List<int> errorLines = new List<int>();
+                                for (int i = 1; i < matrix.Count; i++)
+                                {
+                                    try
+                                    {
+                                        List<string> linea = matrix[i];
+                                        GenericMasterEntity elem = new GenericMasterEntity();
+
+                                        elem.vin = linea[1];
+                                        elem.title = linea[2];
+                                        elem.final_url = linea[4];
+
+                                        elem.make = linea[5];
+                                        elem.model= linea[4];
+                                        elem.year = Convert.ToInt32(linea[7]);
+                                        elem.mileage_value = Convert.ToDecimal(linea[8]);
+                                        elem.mileage_unit = linea[9];
+
+
+                                        elem.transmission = linea[4];
+                                        elem.fuel_type = linea[31];
+                                        elem.body_style = linea[32];
+                                        elem.drivetrain = linea[33];
+
+
+                                        elem.state_of_vehicle = linea[34];
+                                        //elem. = Convert.ToDecimal(linea[8]);
+                                        elem.mileage_unit = linea[9];
+
+
+                                        elem.model = linea[4];
+                                        elem.year = Convert.ToInt32(linea[7]);
+                                        elem.mileage_value = Convert.ToDecimal(linea[8]);
+                                        elem.mileage_unit = linea[9];
+
+
+                                        elem.model = linea[4];
+                                        elem.year = Convert.ToInt32(linea[7]);
+                                        elem.mileage_value = Convert.ToDecimal(linea[8]);
+                                        elem.mileage_unit = linea[9];
+
+
+                                        list.Add(elem);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        errorLines.Add(i);
+                                        continue;
+                                    }
+                                }
 
                                 break;
                             default:

@@ -9,5 +9,7 @@ namespace Domain.Interfaces.Repositories
 {
     public interface IGenericMasterRepository : IRepository<GenericMasterEntity>
     {
+
+        public Task<int> BatchInsertion(IEnumerable<GenericMasterEntity> entities);
     }
 }

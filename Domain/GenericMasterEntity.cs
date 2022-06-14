@@ -26,7 +26,8 @@ namespace Domain.Entities
         public double latitude { get; set; }
         public double longitude { get; set; }
         public string make { get; set; }
-        public int mileage { get; set; }
+        public decimal mileage_value { get; set; }
+        public string mileage_unit { get; set; }
         public string model { get; set; }
         public string msrp { get; set; }
         public string phone_number { get; set; }
